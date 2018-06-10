@@ -1,3 +1,7 @@
+/**
+ * Elaborado por: Juan Dirceu Navarro Arias
+ */
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
