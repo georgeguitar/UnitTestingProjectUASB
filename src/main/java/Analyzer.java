@@ -61,15 +61,12 @@ public class Analyzer {
 			String[] palabras = sentence.text.split(" ");
 			for (String palabra : palabras) {
 				Word word = new Word(palabra.toLowerCase().trim());
-				listaPalabras.add(word);
-			}
-		}
-		for (Word palabra : listaPalabras) {
-			String palabraBuscar = palabra.getText();
-			for (Sentence sentence : sentences) {
-				if (sentence.getText().toLowerCase().trim().contains(palabraBuscar.toLowerCase().trim())) {
-					palabra.increaseTotal(sentence.getScore());
+				for (Sentence sentence1 : sentences) {
+					if (sentence1.getText().toLowerCase().trim().contains(word.getText())) {
+						word.increaseTotal(sentence1.getScore());
+					}
 				}
+				listaPalabras.add(word);
 			}
 		}
 
