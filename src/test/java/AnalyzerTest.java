@@ -14,80 +14,115 @@ import java.util.TreeSet;
 import org.junit.Test;
 
 public class AnalyzerTest {
-	//readFile
+    /*
+     * =========================================
+     * Part 1
+     * =========================================
+     */
+
+    /**
+     * Test if file exist.
+     */
 	@Test
-	public void testNoExisteArchivo() {
-		//cuando el arcchivo no se pueda abrir
-		List<Sentence> lista = new ArrayList<Sentence>();
-		lista = Analyzer.readFile("no_existe_arcchivo.txt");
-		assertTrue(lista.isEmpty());
+	public void readFile_FileExist_True() {
+		List<Sentence> listSentences = Analyzer.readFile("archivo.txt");
+		assertTrue(!listSentences.isEmpty());
 	}
 
+    /**
+     * Test if reads all frases from file.
+     */
+    @Test
+    public void readFile_NumberSentences_CorrectNumber() {
+        List<Sentence> listSentences = Analyzer.readFile("archivo.txt");
+        assertEquals(6, listSentences.size());
+    }
+
+    /**
+     * Test if file does not exist.
+     */
 	@Test
-	public void testReadFileEmpty() {
-		List<Sentence> ListaVaciaResult=Analyzer.readFile("archivo_vacio.txt");
-		assertEquals("", 0, ListaVaciaResult.size());
+	public void readFile_Nofile_True() {
+		List<Sentence> listSentences = Analyzer.readFile("no_existe_arcchivo.txt");
+		assertTrue(listSentences.isEmpty());
 	}
 
+    /**
+     * Test if file is empty.
+     */
 	@Test
-	public void testFormatoIncorrecto() {
-		List<Sentence> lista = Analyzer.readFile("archivo_formato_incorrecto.txt");
-		assertEquals(3, lista.size());
+	public void readFile_FileEmpty_Empty() {
+		List<Sentence> listSentences = Analyzer.readFile("archivo_vacio.txt");
+		assertEquals("", 0, listSentences.size());
 	}
 
+    /**
+     * Test if file has the wrong format.
+     */
 	@Test
-	public void testFormatoIncorrectoLimites() {
-		List<Sentence> lista = Analyzer.readFile("archivo_formato_limites.txt");
-		assertEquals(2, lista.size());
+	public void readFile_WrongFormat_NumSentences() {
+		List<Sentence> listSentences = Analyzer.readFile("archivo_formato_incorrecto.txt");
+		assertEquals(3, listSentences.size());
+	}
+
+    /**
+     * Test if score boundaries are correct.
+     */
+	@Test
+	public void readFile_WorgScoreBoundaries_NumSentences() {
+		List<Sentence> listSentences =  Analyzer.readFile("archivo_formato_limites.txt");
+		assertEquals(2, listSentences.size());
 	}
 
 
 
-	/*
-	 * Implement this method in Part 2
-	 */
-	//allWords
-	//el numero de palabras sea correcto
+    /*
+     * =========================================
+     * Part 2
+     * =========================================
+     */
+
+    /**
+     * Test the right total number of counted words read from file.
+     */
 	@Test
-	public void testNumeroPalabras() {
-		Set<Word> listaPalabras = new TreeSet<Word>();
-		List<Sentence> lista = new ArrayList<Sentence>();
-		lista = Analyzer.readFile("archivo.txt");
-		listaPalabras = Analyzer.allWords(lista);
+	public void allWords_RightTotalNumWords_NumWords() {
+		List<Sentence> lista = Analyzer.readFile("archivo.txt");
+        Set<Word> listaPalabras = Analyzer.allWords(lista);
 		assertEquals(40, listaPalabras.size());
 	}
 
 
-	//cantidad de apariciones.
+    /**
+     * Test the right number of counted words. Ej. "java"
+     */
 	@Test
-	public void testDatosCorrectos() {
-		Set<Word> listaPalabras = new TreeSet<Word>();
-		List<Sentence> lista = new ArrayList<Sentence>();
-		lista = Analyzer.readFile("archivo.txt");
-		listaPalabras = Analyzer.allWords(lista);
+	public void allWords_RightNumberWords_NumberWords() {
+		List<Sentence> listSentences = Analyzer.readFile("archivo.txt");
+        Set<Word> listWords = Analyzer.allWords(listSentences);
 
 		int count = 0;
-		for (Word palabra : listaPalabras) {
-			if("java".equals(palabra.getText())){
-				count = palabra.getCount();
+		for (Word word : listWords) {
+			if("java".equals(word.getText())){
+				count = word.getCount();
 			}
 		}
 
 		assertEquals(2, count);
 	}
 
-	//acumulativo
+    /**
+     * Test the right number of cummulative number of a word. Ej. "java".
+     */
 	@Test
-	public void testDatosCorrectosAcumulativo() {
-		Set<Word> listaPalabras = new TreeSet<Word>();
-		List<Sentence> lista = new ArrayList<Sentence>();
-		lista = Analyzer.readFile("archivo.txt");
-		listaPalabras = Analyzer.allWords(lista);
+	public void allWords_RightCummulativeNumber_NumberWords() {
+		List<Sentence> lista = Analyzer.readFile("archivo.txt");
+        Set<Word> listSentences = Analyzer.allWords(lista);
 
 		int total = 0;
-		for (Word palabra : listaPalabras) {
-			if("java".equals(palabra.getText())){
-				total = palabra.getTotal();
+		for (Word word: listSentences) {
+			if("java".equals(word.getText())){
+				total = word.getTotal();
 			}
 		}
 		assertEquals(4, total);
@@ -95,20 +130,22 @@ public class AnalyzerTest {
 
 
 	/*
-	 * Implement this method in Part 3
+	 * =========================================
+	 * Part 3
+	 * =========================================
 	 */
-	@Test
-	public void testScore() {
-		Set<Word> listaPalabras = new TreeSet<Word>();
-		List<Sentence> lista = new ArrayList<Sentence>();
-		lista = Analyzer.readFile("archivo.txt");
-		listaPalabras = Analyzer.allWords(lista);
 
-		Map<String, Double> mapa = new HashMap<String, Double>();
-		mapa = Analyzer.calculateScores(listaPalabras);
+    /**
+     * Test if score's word is correct. Ej, "fun".
+     */
+	@Test
+	public void calculateScores_RightScore_WordScore() {
+		List<Sentence> listSentences = Analyzer.readFile("archivo.txt");
+        Set<Word> listaPalabras = Analyzer.allWords(listSentences);
+		Map<String, Double> mapWords = Analyzer.calculateScores(listaPalabras);
 
 		double score = 0;
-		for (Map.Entry<String, Double> entry : mapa.entrySet()) {
+		for (Map.Entry<String, Double> entry : mapWords.entrySet()) {
 			if ("fun".equals(entry.getKey())) {
 				score = entry.getValue();
 			}
@@ -116,17 +153,16 @@ public class AnalyzerTest {
 		assertEquals("0.8", String.valueOf(score));
 	}
 
+    /**
+     * Test if if map is empty if an empty file is provided.
+     */
 	@Test
-	public void testMapaVacio() {
-		Set<Word> listaPalabras = new TreeSet<Word>();
-		List<Sentence> lista = new ArrayList<Sentence>();
-		lista = Analyzer.readFile("archivo_vacio.txt");
-		listaPalabras = Analyzer.allWords(lista);
+	public void calculateScores_EmptyMapEmptyFile_MapWords() {
+		List<Sentence> listSentences = Analyzer.readFile("archivo_vacio.txt");
+        Set<Word> listWords = Analyzer.allWords(listSentences);
 
-		Map<String, Double> mapa = new HashMap<String, Double>();
-		mapa = Analyzer.calculateScores(listaPalabras);
+		Map<String, Double> mapWords = Analyzer.calculateScores(listWords);
 
-
-		assertEquals(0, mapa.size());
+		assertEquals(0, mapWords.size());
 	}
 }
